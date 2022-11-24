@@ -28,7 +28,7 @@ Additional Instructions can be found at:  https://certbot.eff.org/instructions?w
 ### 2.1. Enable Access to LetsEncrypt Certs and Conversion
 > **NOTE**:  When prompted for a passcode / password, use `atakatak`
 
-> **NOTE**:    or the following section, DOMAIN =the FQDN,and it MUST follow the name exactly as you submitted with certbot. __DOMAIN__ can be what you wish, though for this example / purpose, they are the same.  Pay close attention to when to use periods versus dashes - they are set that way to minimize confusion as to which files to move during the set up. As an example, if your subdomain was "takserver.randomname.com", you would insert "takserver.randomname.com" and "takserver-randomname-com" in lieu of DOMAIN and __DOMAIN__, respectively.
+> **NOTE**:    or the following section, DOMAIN =the FQDN,and it MUST follow the name exactly as you submitted with certbot. \_\_DOMAIN\_\_ can be what you wish, though for this example / purpose, they are the same.  Pay close attention to when to use periods versus dashes - they are set that way to minimize confusion as to which files to move during the set up. As an example, if your subdomain was "takserver.randomname.com", you would insert "takserver.randomname.com" and "takserver-randomname-com" in lieu of DOMAIN and \_\_DOMAIN\_\_, respectively.
 
 1. $ `sudo -i`
 	(to enable access to `/etc/letsencrypt/live/DOMAIN/`)
