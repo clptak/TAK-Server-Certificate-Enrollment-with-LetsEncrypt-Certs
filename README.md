@@ -3,6 +3,8 @@ Set up instructions to use LetsEncrypt Certificates for TAK Server Certificate E
 
 > **NOTE** LetsEncrypt requires a Fully Qualified Domain Name (FQDN) and will not work with IP addresses)
 
+This tutorial assumes you have a working knowledge of firewalld, basic linux commands, and basic TAK Server operations.  This assumes that your TAK Server is already installed (non-dockerized) and that you are familiar with creating users within TAK Server.  This example was used for flat file authentication, however, it should work for ldap with some modifications.
+
 ## 1. INSTALL CERT-BOT
 ### 1.1. Install `snapd`
 1. $ `sudo yum install snapd`
