@@ -118,3 +118,5 @@ iTAK has two ways to utilize certificate enrollment - adding the server manually
 
 For the QR-Code option, generate a text-based QR-Code using the following format for the text:
 `Name,DOMAIN,8089,SSL`
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/F8wrYstBHy)
