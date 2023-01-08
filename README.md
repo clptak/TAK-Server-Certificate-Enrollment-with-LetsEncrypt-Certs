@@ -92,7 +92,8 @@ Locate the `<input...>` tag for `port="8089`" within the `<network>` section and
 ```
 
 ### 5.2 Certificate Enrollment Configuration 
-#### 5.2.1. Locate `<connector port = "8446" ...> Tag and modify it to reflect the following:
+#### 5.2.1. Configure `<connector port = "8446"...>`
+Locate `<connector port = "8446" ...> Tag and modify it to reflect the following:
 
 ```xml
 <connector port="8446" _name="cert_https" truststorePass="atakatak" 
@@ -102,7 +103,17 @@ Locate the `<input...>` tag for `port="8089`" within the `<network>` section and
 ```
 > **NOTE**: Make sure __DOMAIN__.jks and its path match the cert created in step **2.2** and ensure your truststoreFile matches the intermediate certificate created in Step **#4**
 
-#### 5.2.2 Locate `<dissemination smartRetry="false"/>` and place the following BELOW:
+#### 5.2.2 Configure `<<auth...`
+Locate `<auth..>` tag and add the following:  `x509checkRevocation="true"`
+
+> This example includes attritubes that also enable channels:
+> ```xml
+> <auth x509groups="true" x509addAnonymous="false" x509useGroupCache="true" x509checkRevocation="true">
+>       <File location="UserAuthenticationFile.xml"/>
+> </auth>
+
+#### 5.2.3 Configure `<certificateSigning CA..../>`
+Locate `<dissemination smartRetry="false"/>` and place the following BELOW:
 
 ```xml
 <certificateSigning CA="TAKServer">
@@ -136,20 +147,22 @@ Where the `truststoreFile` attribute matches the cert created in step **2.2** an
 ## 6. END USER DEVICE CERTIFICATE ENROLLMENT
 ### 6.1 ATAK (Android)
 When attempting to connect to the takserver with certificate enrollment, you can "add a server" in ATAK or use the Quick Connect feature.  If using the "add server", the following information will be needed:
-1. Name:  Whatever you want it to be
+1. Name: \[User Supplied\]
 2. URL:  DOMAIN
-3. Check "Enroll for Client Certficate" (DO NOT CHECK "Use Authentication")
+3. Check "Enroll for Client Certficate" 
+	> **DO NOT CHECK "Use Authentication" for flat file authentication** (other authentication methods may require it such as LDAP, etc).
 
 If Using the Quick Connect option, you just need the address (DOMAIN) and the user credentials created TAK Server using the CLI or using the User-Management interface.
 
 ### 6.2 iTAK (iOS)
 iTAK has two ways to utilize certificate enrollment - adding the server manually or by QR Code.  The information needed for either approach is:
-1. Name: [Whatever you want]
+1. Name: `\[User Supplied\]`
 2. URL: `DOMAIN`
 3. Port:  `8089` (unless you have specified otherwise)
 4. Protocol:  `SSL`
 
 For the QR-Code option, generate a text-based QR-Code using the following format for the text:
 `Name,DOMAIN,8089,SSL`
+
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/F8wrYstBHy)
