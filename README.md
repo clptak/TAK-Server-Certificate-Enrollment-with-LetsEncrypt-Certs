@@ -91,7 +91,8 @@ Locate the `<input...>` tag for `port="8089`" within the `<network>` section and
 <input auth="x509" _name="cert_enroll" protocol="tls" port="8089" archive="true" anongroup="false" archiveOnly="false"/>
 ```
 
-### 5.2 Locate `<connector port = "8446" ...> Tag and modify it to reflect the following:
+### 5.2 Certificate Enrollment Configuration 
+#### 5.2.1. Locate `<connector port = "8446" ...> Tag and modify it to reflect the following:
 
 ```xml
 <connector port="8446" _name="cert_https" truststorePass="atakatak" 
@@ -99,6 +100,38 @@ Locate the `<input...>` tag for `port="8089`" within the `<network>` section and
            keystoreFile="certs/files/letsencrypt/__DOMAIN__.jks" keystore="JKS" 
            clientAuth="false"/>
 ```
+> **NOTE**: Make sure __DOMAIN__.jks and its path match the cert created in step **2.2** and ensure your truststoreFile matches the intermediate certificate created in Step **#4**
+
+#### 5.2.2 Locate `<dissemination smartRetry="false"/>` and place the following BELOW:
+
+```xml
+<certificateSigning CA="TAKServer">
+	<certificateConfig> 
+		<nameEntries> 
+			<nameEntry name="O" value="Organization Name"/> 
+			<nameEntry name="OU" value="Department/Unit Name"/>
+		</nameEntries> 
+	</certificateConfig> 
+	<TAKServerCAConfig keystore="JKS" keystoreFile="certs/files/intermediate-signing.jks" 
+			   keystorePass="atakatak" validityDays="30" signatureAlg="SHA256WithRSA" 
+			   CAkey="/opt/tak/certs/files/intermediate" CAcertificate="/opt/tak/certs/files/intermediate"/> 
+</certificateSigning>
+```
+
+#### 5.2.3 Locate `<security>` below step 5.2.2 and make the following changes:
+```xml
+<security> 
+	<tls keystore="JKS" keystoreFile="certs/files/takserver.jks" keystorePass="atakatak" 
+	     truststore="JKS" truststoreFile="certs/files/truststore-intermediate.jks" truststorePass="atakatak" 
+	     context="TLSv1.2" keymanager="SunX509"/>
+	<crl _name="TAKServer CA" crlFile="certs/files/intermediate.crl"/> 
+</security>
+```
+Where the `truststoreFile` attribute matches the cert created in step **2.2** and where the `<crl_name=.../>` tag has been added for certificate revocation.
+
+> **Restart TAK Server**:  `sudo systemctl restart takserver`
+> *Note*:  TAK Server must be restarted for any changes to the CoreConfig.xml to go into effect.
+
 
 ## 6. END USER DEVICE CERTIFICATE ENROLLMENT
 ### 6.1 ATAK (Android)
