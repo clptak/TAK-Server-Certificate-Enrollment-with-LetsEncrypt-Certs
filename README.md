@@ -73,8 +73,8 @@ Additional Instructions can be found at:  https://certbot.eff.org/instructions?w
 7. `cd /opt/tak/certs/files`
 8. `exit`
 9. `cd /opt/tak/certs/files`
-	(If you used the naming convention above, your file list should look like:)
-![tak_certificate_enrollment](https://github.com/clptak/TAK-Server-Certificate-Enrollment-with-LetsEncrypt-Certs/blob/main/tak_certificate_enrollment.jpg)
+	(If you used the naming convention above, your file list should look like:) 
+	<img src="https://github.com/clptak/TAK-Server-Certificate-Enrollment-with-LetsEncrypt-Certs/blob/main/tak_certificate_enrollment.jpg" width="500"/>
 10. `sudo systemctl restart takserver`
 
 
