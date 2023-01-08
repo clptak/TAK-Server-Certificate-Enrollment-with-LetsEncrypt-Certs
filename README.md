@@ -74,7 +74,7 @@ Additional Instructions can be found at:  https://certbot.eff.org/instructions?w
 8. `exit`
 9. `cd /opt/tak/certs/files`
 	(If you used the naming convention above, your file list should look like:)
-![tak_certificate_enrollment](tak_certificate_enrollment.jpg "tak_certificate_enrollment")
+![tak_certificate_enrollment](docs/tak_certificate_enrollment.jpg)
 10. `sudo systemctl restart takserver`
 
 
