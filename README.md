@@ -28,20 +28,22 @@ Additional Instructions can be found at:  https://certbot.eff.org/instructions?w
 ### 2.1. Enable Access to LetsEncrypt Certs and Conversion
 > **NOTE**:  When prompted for a passcode / password, use `atakatak`
 
-> **NOTE**:    or the following section, DOMAIN =the FQDN,and it MUST follow the name exactly as you submitted with certbot. \_\_DOMAIN\_\_ can be what you wish, though for this example / purpose, they are the same.  Pay close attention to when to use periods versus dashes - they are set that way to minimize confusion as to which files to move during the set up. As an example, if your subdomain was "takserver.randomname.com", you would insert "takserver.randomname.com" and "takserver-randomname-com" in lieu of DOMAIN and \_\_DOMAIN\_\_, respectively.
+> **NOTE**:    or the following section, DOMAIN =the FQDN,and it MUST follow the name exactly as you submitted with certbot. MY-DOMAIN can be what you wish, though for this example / purpose, they are the same.  Pay close attention to when to use periods versus dashes - they are set that way to minimize confusion as to which files to move during the set up. As an example, if your subdomain was "takserver.example.com", you would insert "takserver.example.com" and "takserver-example-com" in lieu of MY.DOMAIN and MY-DOMAIN, respectively.
 
 1. $ `sudo -i`
-	(to enable access to `/etc/letsencrypt/live/DOMAIN/`)
-2. $ `openssl pkcs12 -export -in /etc/letsencrypt/live/DOMAIN/fullchain.pem -inkey /etc/letsencrypt/live/DOMAIN/privkey.pem -name __DOMAIN__ -out ~/__DOMAIN__.p12`
-3. $ `keytool -importkeystore -deststorepass atakatak -destkeystore ~/__DOMAIN__.jks -srckeystore ~/__DOMAIN__.p12 -srcstoretype PKCS12`
-4. $ `keytool -import -alias bundle -trustcacerts -file /etc/letsencrypt/live/DOMAIN/fullchain.pem -keystore ~/__DOMAIN__.jks`
+	(to enable access to `/etc/letsencrypt/live/MY.DOMAIN/`)
+2. $ `openssl pkcs12 -export -in /etc/letsencrypt/live/MY.DOMAIN/fullchain.pem -inkey /etc/letsencrypt/live/MY.DOMAIN/privkey.pem -name MY-DOMAIN -out ~/MY-DOMAIN.p12`
+3. $ `keytool -importkeystore -deststorepass atakatak -destkeystore ~/MY-DOMAIN.jks -srckeystore ~/MY-DOMAIN.p12 -srcstoretype PKCS12`
+4. $ `keytool -import -alias bundle -trustcacerts -file /etc/letsencrypt/live/MY.DOMAIN/fullchain.pem -keystore ~/MY-DOMAIN.jks`
+5. $ `exit`
+    (to exit as root user)
 
 ### 2.2. Copy Certs to /opt/tak/
-1. $ `cp ~/__DOMAIN__.jks /opt/tak/certs/files/`
-2. $ `cp ~/__DOMAIN__.p12 /opt/tak/certs/files/`
+1. $ `cp ~/MY-DOMAIN.jks /opt/tak/certs/files/`
+2. $ `cp ~/MY-DOMAIN.p12 /opt/tak/certs/files/`
 3. $ `cd /opt/tak/certs/files`
-4. $ `mv /mv ./__DOMAIN__.jks /letsencrypt`
-5. $ ` mv ./__DOMAIN__.p12 /letsencrypt`
+4. $ `mv /mv ./MY-DOMAIN.jks /letsencrypt`
+5. $ ` mv ./MY-DOMAIN.p12 /letsencrypt`
 6. $ `cd /opt/tak/certs/files/letsencrypt`
 7. $ `ls -lah`  (ensure the files appear and that they are owned by `tak` user)\
 	if not: $ `sudo chown tak:tak -R /opt/tak/certs/files/letsencrypt`
@@ -98,10 +100,10 @@ Locate `<connector port = "8446" ...> Tag and modify it to reflect the following
 ```xml
 <connector port="8446" _name="cert_https" truststorePass="atakatak" 
            truststoreFile="certs/files/truststore-intermediate.jks" truststore="JKS" keystorePass="atakatak" 
-           keystoreFile="certs/files/letsencrypt/__DOMAIN__.jks" keystore="JKS" 
+           keystoreFile="certs/files/letsencrypt/MY-DOMAIN.jks" keystore="JKS" 
            clientAuth="false"/>
 ```
-> **NOTE**: Make sure __DOMAIN__.jks and its path match the cert created in step **2.2** and ensure your truststoreFile matches the intermediate certificate created in Step **#4**
+> **NOTE**: Make sure MY-DOMAIN.jks and its path match the cert created in step **2.2** and ensure your truststoreFile matches the intermediate certificate created in Step **#4**
 
 #### 5.2.2 Configure `<<auth...`
 Locate `<auth..>` tag and add the following:  `x509checkRevocation="true"`
@@ -125,11 +127,11 @@ Locate `<dissemination smartRetry="false"/>` and place the following BELOW:
 	</certificateConfig> 
 	<TAKServerCAConfig keystore="JKS" keystoreFile="certs/files/intermediate-signing.jks" 
 			   keystorePass="atakatak" validityDays="30" signatureAlg="SHA256WithRSA" 
-			   CAkey="/opt/tak/certs/files/intermediate" CAcertificate="/opt/tak/certs/files/intermediate"/> 
+			   CAkey="/opt/tak/certs/files/intermediate.key" CAcertificate="/opt/tak/certs/files/intermediate.pem"/> 
 </certificateSigning>
 ```
 
-#### 5.2.3 Locate `<security>` below step 5.2.2 and make the following changes:
+#### 5.2.4 Locate `<security>` below step 5.2.3 and make the following changes:
 ```xml
 <security> 
 	<tls keystore="JKS" keystoreFile="certs/files/takserver.jks" keystorePass="atakatak" 
